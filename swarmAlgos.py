@@ -4,6 +4,7 @@ from swarm import Swarm
 from particle import Particle
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.animation as animation
 
 
 # this class contains the main logic for the Particle Swarm Optimisation Algorithm
@@ -88,7 +89,17 @@ class ParticleSwarmAlgoFast:
         self.v_max = v_max
         self.ax = ax
         self.iterations = iterations
+        #self.maze = maze
+        # self.wall_positions = []
+        # for i in range(self.grid_size):
+        #     for j in range(self.grid_size):
+        #         if self.maze.maze[i][j] == 0:
+        #             self.wall_positions.append((i, j))
 
+        #print(self.maze.maze)
+        #print("wall positions: ", self.wall_positions)
+
+        #self.particle_positions = np.zeros((swarm_size, 2))
         self.particle_positions = np.random.rand(swarm_size, 2) * grid_size
         self.particle_best_positions = self.particle_positions
         self.particle_velocities = np.random.rand(swarm_size, 2) * (self.v_max - self.v_min) + self.v_min
@@ -98,9 +109,9 @@ class ParticleSwarmAlgoFast:
 
     def update_swarm(self):
 
-        print(self.c1)
-        print(np.random.rand(self.swarm_size, 2))
-        print(self.particle_best_positions - self.particle_positions)
+        #print(self.c1)
+        #print(np.random.rand(self.swarm_size, 2))
+        #print(self.particle_best_positions - self.particle_positions)
 
         self.particle_velocities = (
                 self.w * self.particle_velocities +
@@ -112,7 +123,17 @@ class ParticleSwarmAlgoFast:
 
         self.particle_velocities = np.clip(self.particle_velocities, self.v_min, self.v_max)
 
-        self.particle_positions = np.clip(self.particle_positions + self.particle_velocities, 0, self.grid_size)
+        #self.particle_positions = np.clip(self.particle_positions + self.particle_velocities, 0, self.grid_size)ç
+        new_positions = np.clip(self.particle_positions + self.particle_velocities, 0, np.ones_like(self.particle_positions) * self.grid_size)
+        # for i in range(len(new_positions)):
+        #     print(int(new_positions[i][0]), int(new_positions[i][1]))
+        #     if (int(new_positions[i][0]), int(new_positions[i][1])) in self.wall_positions:
+        #         print("here")
+        #         new_positions[i] = self.particle_positions[i]
+        self.particle_positions = new_positions
+
+
+
 
     def update_fitness(self):
         for i in range(len(self.particle_positions)):
@@ -135,11 +156,11 @@ class ParticleSwarmAlgoFast:
 
             # Clear the axis for the next iteration
             self.ax.clear()
-
+            #self.ax.imshow(self.maze.maze, cmap="binary")
             # Plot the swarm positions
             # print(self.swarm.swarm_positions)
-            x_coords = [x for x, y in self.particle_positions]
-            y_coords = [y for x, y in self.particle_positions]
+            x_coords = [x for y, x in self.particle_positions]
+            y_coords = [y for y, x in self.particle_positions]
             self.ax.scatter(x_coords, y_coords, color='blue')
 
             # Plot the target
@@ -148,8 +169,10 @@ class ParticleSwarmAlgoFast:
             # Set the axis limits
             self.ax.set_xlim(0, self.grid_size)
             self.ax.set_ylim(0, self.grid_size)
-
-            plt.pause(0.1)
+            if i == 0:
+                plt.pause(3)
+            else:
+                plt.pause(0.1)
         plt.show()
 
 
@@ -235,10 +258,6 @@ class AntOptimisationAlgo:
                 weights.append(self.probabilities[x][y + 1])
             next_move = random.choices(choices, k=1)[0]
 
-        if(self.probabilities[next_move[0]][next_move[1]] == 0):
-            print("wrong!")
-        print(next_move)
-        print(self.maze.maze[next_move[0]][-next_move[1]])
         ant.append(next_move)
         return ant
 
@@ -252,7 +271,7 @@ class AntOptimisationAlgo:
 
     def run(self):
         self.ax.imshow(np.log(self.probabilities), cmap='hot')
-        plt.pause(2)
+        plt.pause(10)
         for i in range(self.iterations):
             ants = [[self.start] for _ in range(self.num_ants)]
             for ant in ants:
@@ -277,7 +296,10 @@ class AntOptimisationAlgo:
                 self.ax.plot(antx, anty, color=np.random.rand(3, ), label = label)
                 self.ax.legend()
                 self.ax.scatter(self.target_position[0], self.target_position[1], color='red', marker='x', s=100)
+
             plt.pause(0.05)
+
+
 
 
         print('almost done')
