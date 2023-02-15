@@ -169,10 +169,8 @@ class ParticleSwarmAlgoFast:
             # Set the axis limits
             self.ax.set_xlim(0, self.grid_size)
             self.ax.set_ylim(0, self.grid_size)
-            if i == 0:
-                plt.pause(3)
-            else:
-                plt.pause(0.1)
+
+            plt.pause(0.1)
         plt.show()
 
 
@@ -205,7 +203,7 @@ class AntOptimisationAlgo:
         for i in range(self.grid_size):
             for j in range(self.grid_size):
                 self.heuristics[i][j] = 1 / np.exp(1 + np.linalg.norm((i, j) - self.target_position))
-                #self.heuristics[i][j] = 1 / 1 + np.linalg.norm((i, j) - self.target_position)
+                #self.heuristics[i][j] = 1 / (1 + np.linalg.norm((i, j) - self.target_position))
 
         self.heuristics = self.heuristics / self.heuristics.sum()
 

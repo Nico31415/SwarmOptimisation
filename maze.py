@@ -29,7 +29,9 @@ class Maze:
         while stack:
             print(stack)
             (x, y) = stack[-1]
-            if ((x, y) == self.end).all():
+            print(stack[-1])
+            print(self.end)
+            if ((x, y) == self.end):
                 break
             choices = []
             good_choices = []
