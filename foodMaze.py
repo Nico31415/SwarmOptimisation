@@ -2,7 +2,6 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class Maze:
@@ -37,12 +36,16 @@ class Maze:
             self.food_pos_and_amounts[pos] -= 1
             if self.food_pos_and_amounts[pos] == 0:
                 self.food_pos_and_amounts.pop(pos)
+                print("one less focal point: ", pos)
+                return True
+            else:
+                return False
         except:
-            return
+            return False
 
     def get_food_pos(self):
-        print("In maze code: ", set(self.food_pos_and_amounts.keys()))
-        print("Dict: ", self.food_pos_and_amounts)
+        #print("In maze code: ", set(self.food_pos_and_amounts.keys()))
+        #print("Dict: ", self.food_pos_and_amounts)
         return set(self.food_pos_and_amounts.keys())
 
     def add_food(self):
