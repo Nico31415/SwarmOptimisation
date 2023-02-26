@@ -49,9 +49,9 @@ class RandomWalk:
             all_ants = all_ants + ants
         lengths = list(map(lambda x : len(x), all_ants))
 
-        print("Mean length random walk: ", np.median(lengths))
+        print("Mean length random walk: ", np.mean(lengths))
 
         #plt.hist(lengths)
         #plt.show()
-        return np.median(lengths)
+        return np.mean(lengths)
 
